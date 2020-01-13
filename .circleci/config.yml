@@ -26,7 +26,7 @@ jobs:
       - checkout
       - run:
           name: Deploy Master to Heroku
-          command: git push https://git.heroku.com/xujin-heroku-express.git master
+          command: git push https://heroku:$TOKEN@git.heroku.com/xujin-heroku-express.git master
           
 workflows:
   version: 2
