@@ -16,6 +16,14 @@ jobs:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
           
+  ready-to-deploy:
+    docker:
+      - image: circleci/node:7.10
+    steps:
+      - checkout
+      - run:
+          name: Read to deploy heroku
+          
   deploy:
     docker:
       - image: circleci/node:7.10
@@ -30,9 +38,16 @@ workflows:
   build-deploy:
     jobs:
       - build
-      - deploy:
+      - ready-to-deploy:
+          type: approval
           requires:
             - build
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - ready-to-deploy
           filters:
             branches:
               only: master
